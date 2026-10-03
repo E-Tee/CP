@@ -83,25 +83,10 @@ body::after{
 @media (hover:none){#curDot,#curRing{display:none}}
 
 /* ---------- header ---------- */
-header{position:fixed;top:0;left:0;right:0;z-index:100;transition:background .4s,border-color .4s;border-bottom:1px solid transparent}
-header.scrolled{background:rgba(13,12,10,.86);backdrop-filter:blur(14px);border-bottom-color:var(--line)}
-.hd{display:flex;align-items:center;justify-content:space-between;gap:20px;padding:18px 0}
-.logo{display:flex;align-items:center;gap:14px}
-.logoMark{width:44px;height:44px;border:1px solid var(--line2);display:grid;place-items:center;font-family:var(--disp);font-weight:600;font-size:16px;color:var(--or);position:relative;overflow:hidden;flex:none}
-.logoMark::before{content:"";position:absolute;inset:0;background:var(--or);transform:translateY(101%);transition:transform .35s cubic-bezier(.76,0,.24,1)}
-.logo:hover .logoMark::before{transform:translateY(0)}
-.logo:hover .logoMark{color:#0d0c0a}
-.logoMark span{position:relative;z-index:1}
-.logoTxt{font-family:var(--disp);font-weight:600;font-size:15px;letter-spacing:.06em;text-transform:uppercase;line-height:1.2}
-.logoTxt small{display:block;font-family:var(--body);font-weight:700;font-size:9px;letter-spacing:.28em;color:var(--muted);text-transform:uppercase}
-nav.mainNav{display:flex;gap:30px}
-nav.mainNav a{font-family:var(--body);font-weight:700;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);position:relative;padding:6px 0;transition:color .3s}
-nav.mainNav a::after{content:"";position:absolute;left:0;bottom:0;height:1px;width:100%;background:var(--or);transform:scaleX(0);transform-origin:right;transition:transform .35s cubic-bezier(.76,0,.24,1)}
-nav.mainNav a:hover{color:var(--ink)}
-nav.mainNav a:hover::after{transform:scaleX(1);transform-origin:left}
-.hdRight{display:flex;align-items:center;gap:18px}
-.hdPhone{font-family:var(--disp);font-weight:500;font-size:17px;letter-spacing:.04em;color:var(--ink);transition:color .3s}
-.hdPhone:hover{color:var(--or)}
+/* Стили двухрядной шапки (ряд 1 fixed + subnav sticky), лого, mainNav,
+   дропдана, бургера, mobMenu и отступов якорей — В ОТДЕЛЬНОМ ФАЙЛЕ
+   css/header.css (сниппет SNN «header-css», подключается ПОСЛЕ global.css).
+   Здесь остаются только кнопки (.btn), используемые и в шапке, и на страницах. */
 .btn{display:inline-flex;align-items:center;gap:12px;font-family:var(--body);font-weight:700;font-size:11px;letter-spacing:.16em;text-transform:uppercase;padding:15px 26px;border:1px solid var(--or);color:var(--ink);position:relative;overflow:hidden;background:transparent;transition:color .35s}
 .btn::before{content:"";position:absolute;inset:0;background:var(--or);transform:translateY(101%);transition:transform .4s cubic-bezier(.76,0,.24,1);z-index:0}
 .btn:hover::before{transform:translateY(0)}
@@ -115,20 +100,7 @@ nav.mainNav a:hover::after{transform:scaleX(1);transform-origin:left}
 .btn.ghost::before{background:var(--ink)}
 .btn.ghost:hover{color:#0d0c0a;border-color:var(--ink)}
 .btn.sm{padding:11px 20px}
-#burger{display:none;width:44px;height:44px;position:relative;z-index:111}
-#burger i{position:absolute;left:10px;right:10px;height:2px;background:var(--ink);transition:transform .4s,top .4s,opacity .3s}
-#burger i:nth-child(1){top:16px}#burger i:nth-child(2){top:22px}#burger i:nth-child(3){top:28px}
-body.menuOpen #burger i:nth-child(1){top:22px;transform:rotate(45deg)}
-body.menuOpen #burger i:nth-child(2){opacity:0}
-body.menuOpen #burger i:nth-child(3){top:22px;transform:rotate(-45deg)}
-#mobMenu{position:fixed;inset:0;background:var(--bg2);z-index:110;display:none;flex-direction:column;justify-content:center;padding:100px clamp(24px,8vw,60px) 40px;clip-path:inset(0 0 100% 0);transition:clip-path .6s cubic-bezier(.76,0,.24,1);visibility:hidden}
-body.menuOpen #mobMenu{clip-path:inset(0 0 0 0);visibility:visible}
-.js body.menuOpen #mobMenu{display:flex}
-#mobMenu a.mLink{font-family:var(--disp);font-weight:600;font-size:clamp(30px,8vw,54px);text-transform:uppercase;line-height:1.25;color:var(--ink);border-bottom:1px solid var(--line);padding:14px 0;display:flex;justify-content:space-between;align-items:center}
-#mobMenu a.mLink em{font-family:var(--body);font-style:normal;font-weight:700;font-size:11px;color:var(--or);letter-spacing:.2em}
-#mobMenu .mFoot{margin-top:34px;display:flex;flex-direction:column;gap:8px;color:var(--muted);font-size:13px}
-@media (max-width:1120px){nav.mainNav{display:none}#burger{display:block}.hdPhone{display:none}}
-@media (max-width:560px){.hd .btn{display:none}}
+/* бургер, mobMenu и media-правки шапки — в css/header.css */
 
 /* ---------- hero slider ---------- */
 #hero{position:relative;min-height:100svh;display:flex;flex-direction:column;overflow:hidden}
@@ -138,8 +110,8 @@ body.menuOpen #mobMenu{clip-path:inset(0 0 0 0);visibility:visible}
   linear-gradient(90deg,transparent calc(50% - 1px),var(--line) calc(50% - 1px) 50%,transparent 50%),
   linear-gradient(90deg,transparent calc(75% - 1px),var(--line) calc(75% - 1px) 75%,transparent 75%);
   opacity:.5}
-.slider{position:relative;z-index:3;flex:1;display:flex;flex-direction:column;justify-content:flex-end;padding-top:130px}
-.slide{position:absolute;inset:130px 0 0;display:flex;flex-direction:column;justify-content:flex-end;visibility:hidden;transition:opacity .45s ease,visibility .45s}
+.slider{position:relative;z-index:3;flex:1;display:flex;flex-direction:column;justify-content:flex-end;padding-top:var(--hh,80px)}
+.slide{position:absolute;inset:var(--hh,80px) 0 0;display:flex;flex-direction:column;justify-content:flex-end;visibility:hidden;transition:opacity .45s ease,visibility .45s}
 .slide:first-child{opacity:1;visibility:visible}
 /* под JS все слайды скрыты, видимый — только с классом .active (управляет global.js) */
 .js .slide{opacity:0;visibility:hidden}

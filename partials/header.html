@@ -1,1 +1,186 @@
-<!-- шапка: fixed + blur, лого, меню, телефон, CTA, mobMenu, preloader, cursor -->
+<!-- =====================================================================
+     header.html — ДВУХРЯДОВАЯ ШАПКА (единый partial на весь сайт)
+     КУДА: сниппет SNN «header» → вывод в Site header темы (Bricks/Site Header).
+     Ряд 1 (fixed, 80px) одинаков на всех страницах. Пункты — smart-anchors:
+       href = реальный URL страницы + data-anchor = id блока; JS (global.js)
+       при клике: если секция data-anchor есть на ТЕКУЩЕЙ странице — плавный
+       скролл к ней; иначе — переход по href и автоскролл после загрузки.
+     Подсветка активного пункта ряда 1 — классом .is-active (ставит JS по
+       совпадению pathname; для главной пункты с якорями подсвечиваются по
+       прокрутке через IntersectionObserver тех же секций).
+     Ряд 2 (subnav) — НЕ в этом partial: хардкодится первым блоком КОНТЕНТА
+       каждой страницы (см. docs/site-structure-full.md §2.0), position:sticky;
+       top:80px; z-index:90. Списки ссылок фиксированы по шаблонам, без JS-генерации.
+     CSS: css/header.css (сниппет «header-css», после global.css).
+     Замечания:
+     - телефон/почта/адрес — NAP из AGENTS.md (+7 812 64-222-64);
+     - год «с 2013» — по решению (SEO-контент-источник);
+     - CTA «Расчёт по фото» href="#calc" — на страницах без блока #calc JS
+       подменяет её ссылку на /kontakty/ (guard-логика в global.js);
+     - NO-JS: ссылки ряда 1 работают как обычные переходы по href; subnav
+       страниц работает нативно (#якорь + scroll-margin-top + smooth);
+       mobMenu без JS недоступен (навигация дублируется в футере).
+     ===================================================================== -->
+
+<header id="hdr">
+  <div class="wrap hd">
+
+    <!-- лого -->
+    <a class="logo" href="/" data-hover aria-label="ЦентрПескоструя — на главную">
+      <span class="logoMark"><span>ЦП</span></span>
+      <span class="logoTxt">ЦентрПескоструя<small>СПб · с 2013 года</small></span>
+    </a>
+
+    <!-- ряд 1: меню сайта (smart-anchors) -->
+    <nav class="mainNav" aria-label="Основная навигация">
+      <a href="/obekty/" data-anchor="trust" data-hover>Наследие</a>
+
+      <div class="dd" id="ddServices">
+        <button class="ddBtn" type="button" aria-expanded="false" aria-controls="ddPanel" data-hover>
+          Услуги<span class="ddCaret" aria-hidden="true"></span>
+        </button>
+        <div class="ddPanel" id="ddPanel">
+          <!-- колонка 1: фасады / дерево -->
+          <div class="ddCol">
+            <h4><a href="/fasady/">Фасады, камень и бетон</a></h4>
+            <ul>
+              <li><a href="/uslugi/ochistka-fasadov/">Очистка фасадов</a></li>
+              <li><a href="/uslugi/ochistka-kirpicha/">Очистка кирпича</a></li>
+              <li><a href="/uslugi/ochistka-betona/">Очистка бетона</a></li>
+              <li><a href="/uslugi/ochistka-pamyatnikov/">Очистка памятников</a></li>
+            </ul>
+            <h4><a href="/derevo/">Дерево</a></h4>
+            <ul>
+              <li><a href="/uslugi/ochistka-derevyannyh-domov/">Очистка деревянных домов</a></li>
+              <li><a href="/uslugi/ochistka-brusa/">Очистка бруса</a></li>
+            </ul>
+          </div>
+          <!-- колонка 2: металл / авто -->
+          <div class="ddCol">
+            <h4><a href="/metall/">Металл и мосты</a></h4>
+            <ul>
+              <li><a href="/uslugi/ochistka-metallokonstrukcij/">Очистка металлоконструкций</a></li>
+              <li><a href="/uslugi/ochistka-mostov/">Очистка мостов</a></li>
+              <li><a href="/uslugi/ochistka-alyuminiya/">Очистка алюминия</a></li>
+              <li><a href="/uslugi/ochistka-posle-pozhara/">Очистка после пожара</a></li>
+            </ul>
+            <h4><a href="/auto/">Авто и техника</a></h4>
+            <ul>
+              <li><a href="/uslugi/ochistka-gruzovikov/">Очистка грузовиков</a></li>
+              <li><a href="/uslugi/ochistka-dnishcha/">Очистка днища</a></li>
+              <li><a href="/uslugi/ochistka-diskov/">Очистка дисков</a></li>
+              <li><a href="/uslugi/ochistka-zapchastej/">Очистка запчастей</a></li>
+              <li><a href="/uslugi/ochistka-spectehniki/">Очистка спецтехники</a></li>
+              <li><a href="/uslugi/peskostruj-i-pokraska-spectehniki/">Пескоструй и покраска спецтехники</a></li>
+            </ul>
+          </div>
+          <!-- колонка 3: суда / спецработы / хаб -->
+          <div class="ddCol">
+            <h4><a href="/syda/">Суда и яхты</a></h4>
+            <ul>
+              <li><a href="/uslugi/ochistka-sudov/">Очистка судов</a></li>
+              <li><a href="/uslugi/ochistka-yacht/">Очистка яхт</a></li>
+            </ul>
+            <h4><a href="/speczifika/">Спецработы</a></h4>
+            <ul>
+              <li><a href="/uslugi/ochistka-dorog/">Очистка дорог</a></li>
+              <li><a href="/uslugi/ochistka-shtukaturnyh-stancij/">Очистка штукатурных станций</a></li>
+            </ul>
+            <h4><a href="/uslugi/">Все услуги</a></h4>
+            <ul>
+              <li><a href="/vyezd/">Выездные работы</a></li>
+              <li><a href="/price/">Цены</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <a href="/okompanii/" data-anchor="why" data-hover>Почему мы</a>
+      <a href="/oborudovanie/" data-anchor="equip" data-hover>Оборудование</a>
+      <a href="/price/" data-anchor="prices" data-hover>Цены</a>
+      <a href="/kontakty/" data-hover>Контакты</a>
+    </nav>
+
+    <!-- правая часть ряда 1 -->
+    <div class="hdRight">
+      <a class="hdPhone" href="tel:+78126422264" data-hover>+7 (812) 64-222-64</a>
+      <a class="btn sm solid" href="#calc" data-hover><span>Расчёт по фото</span></a>
+      <button id="burger" aria-label="Открыть меню" aria-expanded="false" aria-controls="mobMenu"><i></i><i></i><i></i></button>
+    </div>
+
+  </div>
+</header>
+
+<!-- мобильное меню: глассморфизм + крестик + аккордеон услуг -->
+<div id="mobMenu" aria-hidden="true">
+  <button id="mobClose" aria-label="Закрыть меню"></button>
+
+  <a class="mLink" href="/obekty/" data-anchor="trust">Наследие <em>01</em></a>
+
+  <div class="mobAcc" id="mobAccServices">
+    <button type="button" aria-expanded="false" data-hover>Услуги <em>02</em></button>
+    <div class="accBody">
+      <a class="accCat" href="/uslugi/">Все услуги</a>
+      <a class="accCat" href="/fasady/">Фасады, камень и бетон</a>
+      <div class="accList">
+        <a href="/uslugi/ochistka-fasadov/">Очистка фасадов</a>
+        <a href="/uslugi/ochistka-kirpicha/">Очистка кирпича</a>
+        <a href="/uslugi/ochistka-betona/">Очистка бетона</a>
+        <a href="/uslugi/ochistka-pamyatnikov/">Очистка памятников</a>
+      </div>
+      <a class="accCat" href="/metall/">Металл и мосты</a>
+      <div class="accList">
+        <a href="/uslugi/ochistka-metallokonstrukcij/">Очистка металлоконструкций</a>
+        <a href="/uslugi/ochistka-mostov/">Очистка мостов</a>
+        <a href="/uslugi/ochistka-alyuminiya/">Очистка алюминия</a>
+        <a href="/uslugi/ochistka-posle-pozhara/">Очистка после пожара</a>
+      </div>
+      <a class="accCat" href="/auto/">Авто и техника</a>
+      <div class="accList">
+        <a href="/uslugi/ochistka-gruzovikov/">Очистка грузовиков</a>
+        <a href="/uslugi/ochistka-dnishcha/">Очистка днища</a>
+        <a href="/uslugi/ochistka-diskov/">Очистка дисков</a>
+        <a href="/uslugi/ochistka-zapchastej/">Очистка запчастей</a>
+        <a href="/uslugi/ochistka-spectehniki/">Очистка спецтехники</a>
+        <a href="/uslugi/peskostruj-i-pokraska-spectehniki/">Пескоструй и покраска спецтехники</a>
+      </div>
+      <a class="accCat" href="/derevo/">Дерево</a>
+      <div class="accList">
+        <a href="/uslugi/ochistka-derevyannyh-domov/">Очистка деревянных домов</a>
+        <a href="/uslugi/ochistka-brusa/">Очистка бруса</a>
+      </div>
+      <a class="accCat" href="/syda/">Суда и яхты</a>
+      <div class="accList">
+        <a href="/uslugi/ochistka-sudov/">Очистка судов</a>
+        <a href="/uslugi/ochistka-yacht/">Очистка яхт</a>
+      </div>
+      <a class="accCat" href="/speczifika/">Спецработы</a>
+      <div class="accList">
+        <a href="/uslugi/ochistka-dorog/">Очистка дорог</a>
+        <a href="/uslugi/ochistka-shtukaturnyh-stancij/">Очистка штукатурных станций</a>
+      </div>
+    </div>
+  </div>
+
+  <a class="mLink" href="/okompanii/" data-anchor="why">Почему мы <em>03</em></a>
+  <a class="mLink" href="/oborudovanie/" data-anchor="equip">Оборудование <em>04</em></a>
+  <a class="mLink" href="/price/" data-anchor="prices">Цены <em>05</em></a>
+  <a class="mLink" href="/kontakty/">Контакты <em>06</em></a>
+  <a class="mLink" href="#calc">Заявка <em>07</em></a>
+
+  <div class="mFoot">
+    <a href="tel:+78126422264">+7 (812) 64-222-64</a>
+    <a href="mailto:pesko.struyspb@mail.ru">pesko.struyspb@mail.ru</a>
+    <span>СПб, м. Парнас, ул. Заречная, 23А · Пн–Сб 9:00–23:00</span>
+  </div>
+</div>
+
+<!-- EXAMPLE SUBNAV (НЕ раскомментировать в partial!) — эталонный образец,
+     копируется В КОНТЕНТ каждой страницы по шаблону (§2.0 site-structure-full.md):
+
+<nav class="subnav" aria-label="Разделы страницы"><div class="wrap subnavIn">
+  <a href="#tasks">Задачи</a><a href="#how">Как работаем</a><a href="#prices">Цены</a>
+  <a href="#cases">Кейсы</a><a href="#faq">FAQ</a><a href="#calc">Заявка</a>
+</div></nav>
+
+     Главная, /kontakty/, /404/, политика, карта сайта — subnav НЕТ. -->

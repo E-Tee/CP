@@ -1,0 +1,168 @@
+/* =====================================================================
+   header.css — ДВУХРЯДОВАЯ ШАПКА «ЦентрПескоструя» (ряд 1 fixed + subnav sticky)
+   КУДА: сниппет SNN «header-css», тип CSS, локация Site head, условий нет.
+   Порядок подключения ВАЖЕН: global.css → header.css (этот файл переопределяет
+   старые одноуровневые стили header/mainNav/mobMenu из global.css).
+
+   ПОВЕДЕНИЕ:
+   - Ряд 1: position:fixed, высота --hh:80px, на всех страницах одинаковый.
+     Пункты = smart-anchors: href реальный URL + data-anchor (JS global.js/
+     header-логика: если секция data-anchor есть на текущей странице — скролл
+     к ней, иначе — переход по href).
+   - Ряд 2 (subnav): первый блок контента страницы, position:sticky; top:80px;
+     z-index:90; без JS работает нативно (обычные ссылки #id + плавный скролл
+     + scroll-margin-top). JS только: подсветка активного якоря + удаление
+     ссылок, чьих секций нет на странице.
+   - Шапка НЕ перекрывает верх блока: scroll-margin-top = 80px (ряд 1) +
+     56px (subnav) = 136px на страницах с subnav; на главной и страницах без
+     subnav — 80px.
+   - Мобильное меню: полупрозрачный фон + blur (глассморфизм), крестик
+     закрытия в правом верхнем углу, аккордеон дропдауна услуг.
+   - NO-JS: mobMenu скрыт visibility:hidden и не открывается без JS — это
+     нормально (меню доступно через subnav/футер); при .js показывается
+     корректно. Подсветка active без JS — только hover-стили.
+   ===================================================================== */
+
+:root{--hh:80px;--subh:56px}
+
+/* ---------- ряд 1 (fixed) ---------- */
+#hdr{position:fixed;top:0;left:0;right:0;height:var(--hh);z-index:100;
+  background:rgba(13,12,10,.72);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  border-bottom:1px solid var(--line);transition:background .4s,border-color .4s}
+#hdr.scrolled{background:rgba(13,12,10,.92)}
+.hd{display:flex;align-items:center;justify-content:space-between;gap:20px;height:var(--hh)}
+
+/* лого */
+.logo{display:flex;align-items:center;gap:14px;flex:none}
+.logoMark{width:44px;height:44px;border:1px solid var(--line2);display:grid;place-items:center;
+  font-family:var(--disp);font-weight:600;font-size:16px;color:var(--or);position:relative;overflow:hidden;flex:none}
+.logoMark::before{content:"";position:absolute;inset:0;background:var(--or);transform:translateY(101%);
+  transition:transform .35s cubic-bezier(.76,0,.24,1)}
+.logo:hover .logoMark::before{transform:translateY(0)}
+.logo:hover .logoMark{color:#0d0c0a}
+.logoMark span{position:relative;z-index:1}
+.logoTxt{font-family:var(--disp);font-weight:600;font-size:15px;letter-spacing:.06em;text-transform:uppercase;line-height:1.2}
+.logoTxt small{display:block;font-family:var(--body);font-weight:700;font-size:9px;letter-spacing:.28em;color:var(--muted);text-transform:uppercase}
+
+/* навигация ряда 1 */
+.mainNav{display:flex;gap:26px;align-items:center}
+.mainNav > a,.mainNav > .dd > .ddBtn{font-family:var(--body);font-weight:700;font-size:11px;
+  letter-spacing:.16em;text-transform:uppercase;color:var(--muted);position:relative;padding:6px 0;
+  transition:color .3s;background:none;border:none;cursor:pointer;display:inline-flex;align-items:center;gap:7px}
+.mainNav > a::after,.mainNav > .dd > .ddBtn::after{content:"";position:absolute;left:0;bottom:0;height:1px;width:100%;
+  background:var(--or);transform:scaleX(0);transform-origin:right;transition:transform .35s cubic-bezier(.76,0,.24,1)}
+.mainNav > a:hover,.mainNav > .dd:hover > .ddBtn,.mainNav > .dd.open > .ddBtn{color:var(--ink)}
+.mainNav > a:hover::after,.mainNav > .dd:hover > .ddBtn::after{transform:scaleX(1);transform-origin:left}
+/* активная страница / активный якорь */
+.mainNav > a.is-active,.mainNav > .dd.is-active > .ddBtn{color:var(--or)}
+.mainNav > a.is-active::after,.mainNav > .dd.is-active > .ddBtn::after{transform:scaleX(1);transform-origin:left}
+
+/* дропдаун «Услуги» */
+.dd{position:relative}
+.ddBtn .ddCaret{width:8px;height:8px;border-right:1.5px solid currentColor;border-bottom:1.5px solid currentColor;
+  transform:rotate(45deg) translateY(-2px);transition:transform .3s}
+.dd:hover .ddCaret,.dd.open .ddCaret{transform:rotate(225deg) translateY(-2px)}
+.ddPanel{position:absolute;top:calc(100% + 6px);left:50%;transform:translateX(-50%) translateY(10px);
+  min-width:760px;max-width:min(92vw,900px);background:rgba(21,19,16,.92);backdrop-filter:blur(18px);
+  -webkit-backdrop-filter:blur(18px);border:1px solid var(--line);padding:26px;
+  display:grid;grid-template-columns:repeat(3,1fr);gap:26px;visibility:hidden;opacity:0;pointer-events:none;
+  transition:opacity .3s,transform .3s,visibility .3s;z-index:10}
+.dd:hover .ddPanel,.dd:focus-within .ddPanel,.dd.open .ddPanel{visibility:visible;opacity:1;pointer-events:auto;transform:translateX(-50%) translateY(0)}
+.ddCol h4{font-family:var(--disp);font-weight:600;font-size:12px;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--sand);margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid var(--line)}
+.ddCol h4 a{color:inherit;transition:color .3s}
+.ddCol h4 a:hover{color:var(--or)}
+.ddCol ul{list-style:none}
+.ddCol li a{display:block;font-size:12px;font-weight:500;color:var(--muted);padding:5px 0;transition:color .25s,padding-left .25s}
+.ddCol li a:hover{color:var(--ink);padding-left:6px}
+.ddCol li a.is-current{color:var(--or)}
+
+/* правая часть ряда 1 */
+.hdRight{display:flex;align-items:center;gap:18px;flex:none}
+.hdPhone{font-family:var(--disp);font-weight:500;font-size:17px;letter-spacing:.04em;color:var(--ink);transition:color .3s}
+.hdPhone:hover{color:var(--or)}
+
+/* бургер (десктоп: скрыт) */
+#burger{display:none;width:44px;height:44px;position:relative;z-index:111;background:none;border:none;cursor:pointer}
+#burger i{position:absolute;left:10px;right:10px;height:2px;background:var(--ink);transition:transform .4s,top .4s,opacity .3s}
+#burger i:nth-child(1){top:16px}#burger i:nth-child(2){top:22px}#burger i:nth-child(3){top:28px}
+body.menuOpen #burger i:nth-child(1){top:22px;transform:rotate(45deg)}
+body.menuOpen #burger i:nth-child(2){opacity:0}
+body.menuOpen #burger i:nth-child(3){top:22px;transform:rotate(-45deg)}
+
+/* ---------- мобильное меню: глассморфизм + крестик + аккордеон ---------- */
+#mobMenu{position:fixed;inset:0;z-index:110;display:none;flex-direction:column;
+  background:rgba(13,12,10,.78);backdrop-filter:blur(20px) saturate(1.2);-webkit-backdrop-filter:blur(20px) saturate(1.2);
+  padding:calc(var(--hh) + 26px) clamp(24px,8vw,60px) 40px;overflow-y:auto;
+  clip-path:inset(0 0 100% 0);visibility:hidden;transition:clip-path .6s cubic-bezier(.76,0,.24,1)}
+.js body.menuOpen #mobMenu{display:flex;visibility:visible;clip-path:inset(0 0 0 0)}
+
+/* крестик закрытия */
+#mobClose{position:absolute;top:18px;right:clamp(18px,6vw,44px);width:44px;height:44px;z-index:112;
+  display:grid;place-items:center;background:rgba(242,237,227,.06);border:1px solid var(--line);cursor:pointer;
+  transition:border-color .3s,background .3s,transform .3s}
+#mobClose:hover{border-color:var(--or);background:rgba(255,77,0,.12);transform:rotate(90deg)}
+#mobClose::before,#mobClose::after{content:"";position:absolute;width:18px;height:2px;background:var(--ink)}
+#mobClose::before{transform:rotate(45deg)}
+#mobClose::after{transform:rotate(-45deg)}
+
+#mobMenu a.mLink{font-family:var(--disp);font-weight:600;font-size:clamp(26px,7vw,46px);text-transform:uppercase;
+  line-height:1.25;color:var(--ink);border-bottom:1px solid var(--line);padding:13px 0;
+  display:flex;justify-content:space-between;align-items:center}
+#mobMenu a.mLink em{font-family:var(--body);font-style:normal;font-weight:700;font-size:11px;color:var(--or);letter-spacing:.2em}
+#mobMenu a.mLink.is-active{color:var(--or)}
+/* аккордеон «Услуги» в моб-меню */
+.mobAcc{border-bottom:1px solid var(--line)}
+.mobAcc > button{width:100%;display:flex;justify-content:space-between;align-items:center;background:none;border:none;
+  cursor:pointer;font-family:var(--disp);font-weight:600;font-size:clamp(26px,7vw,46px);text-transform:uppercase;
+  color:var(--ink);padding:13px 0;text-align:left}
+.mobAcc > button em{font-family:var(--body);font-style:normal;font-weight:700;font-size:11px;color:var(--or);letter-spacing:.2em}
+.mobAcc .accBody{max-height:0;overflow:hidden;transition:max-height .5s cubic-bezier(.76,0,.24,1)}
+.mobAcc.open .accBody{max-height:1400px}
+.mobAcc .accCat{display:block;font-family:var(--disp);font-weight:600;font-size:14px;letter-spacing:.12em;
+  text-transform:uppercase;color:var(--sand);padding:16px 0 6px}
+.mobAcc .accList a{display:block;font-size:14px;color:var(--muted);padding:7px 0 7px 14px;border-left:1px solid var(--line);transition:color .25s,border-color .25s}
+.mobAcc .accList a:hover,.mobAcc .accList a.is-current{color:var(--or);border-color:var(--or)}
+#mobMenu .mFoot{margin-top:30px;display:flex;flex-direction:column;gap:8px;color:var(--muted);font-size:13px}
+#mobMenu .mFoot a{color:var(--ink);font-family:var(--disp);font-size:19px;letter-spacing:.03em}
+
+/* ---------- ряд 2: subnav (в разметке каждой страницы, кроме главной) ---------- */
+.subnav{position:sticky;top:var(--hh);z-index:90;background:rgba(13,12,10,.86);
+  backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+.subnavIn{display:flex;align-items:center;gap:4px;height:var(--subh);overflow-x:auto;scrollbar-width:none;-ms-overflow-style:none}
+.subnavIn::-webkit-scrollbar{display:none}
+.subnav a{flex:none;font-family:var(--body);font-weight:700;font-size:11px;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--muted);padding:8px 14px;position:relative;transition:color .3s;white-space:nowrap}
+.subnav a::after{content:"";position:absolute;left:14px;right:14px;bottom:2px;height:2px;background:var(--or);
+  transform:scaleX(0);transform-origin:right;transition:transform .35s cubic-bezier(.76,0,.24,1)}
+.subnav a:hover{color:var(--ink)}
+.subnav a:hover::after{transform:scaleX(1);transform-origin:left}
+.subnav a.is-active{color:var(--or)}
+.subnav a.is-active::after{transform:scaleX(1);transform-origin:left}
+/* NO-JS: без JS subnav выглядит как обычная строка ссылок — ссылки работают нативно */
+
+/* ---------- отступы под двухрядную шапку ---------- */
+/* главная: hero идёт под фикс. рядом 1 (без subnav) */
+.home #hero{padding-top:var(--hh)}
+/* все страницы: контент стартует ниже ряда 1 */
+.pageWrap{padding-top:var(--hh)}
+/* блоки-якоря: чтобы sticky/fixed шапка не перекрывала верх блока при переходе по #якорю */
+.anchor{scroll-margin-top:calc(var(--hh) + var(--subh))}      /* страницы с subnav (по умолчанию) */
+.noSubnav .anchor,.home .anchor{scroll-margin-top:var(--hh)}  /* главная и страницы без subnav */
+
+/* ---------- адаптив ---------- */
+@media (max-width:1120px){
+  .mainNav{display:none}
+  #burger{display:block}
+  .hdPhone{display:none}
+}
+@media (max-width:560px){
+  .hd .btn{display:none}                 /* CTA «Расчёт по фото» — в моб-меню */
+  .hdPhone{font-size:14px;display:block} /* телефон оставляем компактным */
+}
+
+/* ---------- reduced motion ---------- */
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  #mobMenu,.mobAcc .accBody,.ddPanel,.subnav a::after,.mainNav > a::after,.logoMark::before,#mobClose{transition:none!important}
+}
