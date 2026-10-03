@@ -78,7 +78,7 @@ page-{slug}.css (если есть), global.js в конце body, page-{slug}.j
 .wrap .mono .btn .btn.solid .btn.ghost .mq .secHead .secLabel .secTitle .secNote
 .trustGrid .trustCell .trustMark .statGrid .statCell[data-to][data-suf] .svcRow
 #svcPreview .whyCell .equipCard .priceRow .revCard .ctForm #formOk .ftBig .rv .in
-#preloader #curDot #curRing #mobMenu .burger #hdr
+#preloader #curDot #curRing #mobMenu #burger #hdr
 Новый компонент — нейминг в том же духе + дописать в progress.md «Контракт классов».
 
 ## SEO-ТРЕБОВАНИЯ К КАЖДОЙ СТРАНИЦЕ (значения — из seo-structure.txt)
